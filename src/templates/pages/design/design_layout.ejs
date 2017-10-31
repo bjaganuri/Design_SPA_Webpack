@@ -1,0 +1,31 @@
+<div class="row">
+	<div class="col-sm-12 col-md-12 m-b-15">
+		<h2>Select Mode of Design</h2>
+		<form class="form-horizontal">
+			<div class="radio">
+				<label><input type="radio" data-ng-model="psdTotemplate" data-ng-value="true">I want to convert PSD image to HTML template</label>	
+			</div>
+			<div class="radio">
+				<label><input type="radio" data-ng-model="psdTotemplate" data-ng-value="false">I want to draw manually</label>	
+			</div>
+		</form>
+	</div>
+	<div class="col-sm-12 col-md-12" ng-show="psdTotemplate">
+		<input type="file" file-model="myFile" class="pull-left file-input-height"/>
+		<label class="pull-left m-r-15"><input type="checkbox" name="saveFileForFutureUse" ng-model="saveFileForFutureUse">&nbsp;Save PSD for Future Use</label>
+		<button ng-click="uploadFile()" class="pull-left file-input-height">Generate Template</button>
+	</div>
+	<div class="col-sm-12 col-md-12" ng-show="!psdTotemplate">
+		<div class="form-horizontal">
+			<div class="form-group">
+				<label for="elements" class="col-sm-2">Select the Element:</label>
+				<div class="col-sm-4">
+					<select class="form-control" id="elements">
+		
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

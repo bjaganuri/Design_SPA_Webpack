@@ -1,0 +1,28 @@
+.body{
+	overflow:visible !important;
+}
+#vNavBar .glyphicon-chevron-right{
+	margin-right:5px;
+	float:right;
+}
+#vNavBar .dropdown-menu , .signUpFormContainer .dropdown-menu{
+	border : 1px solid gray;
+	border-radius:0px;	
+}
+#vNavBar .dropdown-menu{
+	left:100%;
+	top:0px;
+}
+#vNavBar .navbar-nav > li > a , .signUpFormContainer .dropdown-menu > li > a {
+	color:#337ab7 !important;
+}
+#vNavBar .navbar-nav li a:hover,#vNavBar .navbar-nav li a:focus , .signUpFormContainer .dropdown-menu li a:hover,.signUpFormContainer .dropdown-menuli a:focus{
+	background-color: #337ab7 !important;
+	color: #fff !important;
+}
+#vNavBar .menuItem , .signUpFormContainer .menuItem{
+	background:#fff;
+}
+#vNavBar .navbar-nav , #vNavBar .navbar-nav li{
+	width:100%;
+}
