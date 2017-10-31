@@ -8,10 +8,10 @@
     "npm": "2.1.x"
   },
   "scripts": {
-    "test": "npm install",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build",
-    "dev": "webpack -d",
-    "build": "webpack -d && nodemon app.js"
+    "dev": "webpack -d && nodemon server.js",
+    "build": "webpack -p && node server.js"
   },
   "author": "Basavaraj B J",
   "license": "MIT",
