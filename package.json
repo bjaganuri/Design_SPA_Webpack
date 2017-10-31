@@ -10,8 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build",
-    "dev": "webpack -d && nodemon server.js",
-    "build": "webpack -p && node server.js"
+    "dev": "webpack -d && nodemon app.js",
+    "build": "webpack -p && node app.js"
   },
   "author": "Basavaraj B J",
   "license": "MIT",
