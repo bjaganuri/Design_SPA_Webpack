@@ -204,7 +204,7 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 
 		if(exportAs === "PDF"){				
 			restDataService.post(
-				'users/html2pdf',
+				'/html2pdf',
 				{html2pdfData:JSON.stringify(userAccountTableClone.outerHTML)},
 				{headers: {
 					'Content-Type': "application/json",
