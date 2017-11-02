@@ -4,7 +4,7 @@
   "description": "This is sample application",
   "main": "app.js",
   "engines": {
-    "node": "6.11.5",
+    "node": "6.10.3",
     "npm": "3.10.10"
   },
   "scripts": {
