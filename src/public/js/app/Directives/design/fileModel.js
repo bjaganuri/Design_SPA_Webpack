@@ -14,4 +14,5 @@ function fileModel($parse) {
 	};
 }
 
+fileModel.$inject = ["$parse"];
 module.exports = fileModel;

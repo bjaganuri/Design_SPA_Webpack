@@ -47,4 +47,5 @@ function userProfileController($scope,restDataService) {
 	};
 }
 
+userProfileController.$inject = ["$scope","restDataService"];
 module.exports = userProfileController;

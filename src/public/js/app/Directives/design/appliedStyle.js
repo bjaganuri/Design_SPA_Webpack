@@ -14,7 +14,7 @@ function appliedStyle() {
 			};
 			return linkFunction;
 		},
-		controller:function ($scope,$element,$attrs) {
+		controller:["$scope","$element","$attrs" , function ($scope,$element,$attrs) {
 			$scope.updateStyle = function ($event) {
 				if($event != undefined){
 					$event = $event || window.event;
@@ -29,7 +29,7 @@ function appliedStyle() {
 				}
 				$scope.curElemAppliedStyles[$scope.key] = $scope.value;
 			};
-		}
+		}]
 	};
 }
 

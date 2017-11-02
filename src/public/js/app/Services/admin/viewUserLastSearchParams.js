@@ -23,4 +23,5 @@ function viewUserLastSearchParams() {
 	};
 }
 
+viewUserLastSearchParams.$inject = [];
 module.exports = viewUserLastSearchParams;

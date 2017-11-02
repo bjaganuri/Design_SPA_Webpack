@@ -51,4 +51,5 @@ function recoverUserController($scope,restDataService){
 	};
 }
 
+recoverUserController.$inject = ['$scope','restDataService'];
 module.exports = recoverUserController;

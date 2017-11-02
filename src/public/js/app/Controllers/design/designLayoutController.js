@@ -58,4 +58,5 @@ function designLayoutController($scope,fileUpload,restDataService){
 	};
 }
 
+designLayoutController.$inject = ["$scope","fileUpload","restDataService"];
 module.exports = designLayoutController;

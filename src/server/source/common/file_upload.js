@@ -11,11 +11,11 @@ var handleServerError = require("./error_handler");
 
 var fileStorage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		var dest = 'Uploads/'+req.user.username;
+		var dest = 'uploads/'+req.user.username;
         mkdirp.sync(dest , function (err) {
         	if(err)
         		console.log(err);
-        	console.log('Uploads directory created');
+        	console.log('uploads directory has been created');
         });
         cb(null, dest);
 	},

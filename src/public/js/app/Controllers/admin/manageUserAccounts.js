@@ -80,7 +80,7 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 		var _this = $scope;
 		var modalInstance = ModalService.showModal({
 			templateUrl: 'adminOpComments.html',
-			controller:function($scope, $element, close){
+			controller:["$scope", "$element", "close",function($scope, $element, close){
 				$scope.adminOpModalTitle = "Update "+_this.userDataToUpdate.name+"\'s Account status and Admin Rights";
 				$scope.toUpdate = toUpdate;
 				$scope.operationalStatus = _this.userDataToUpdate.opState;
@@ -132,10 +132,10 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 						$scope.submitted = false;
 					}
 				}
-			},
-			preClose: function(modal){
+			}],
+			preClose: ["modal",function(modal){
 				return modal.element.modal('hide');
-			}
+			}]
 		}).then(function(modal) {
 			modal.element.modal();
 			modal.close.then(function(result) {
@@ -248,4 +248,5 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 	}
 }
 
+manageUserAccounts.$inject = ['$scope','restDataService','$state','userToView','ModalService','lastViewedUserActList','viewUserLastSearchParams'];
 module.exports = manageUserAccounts;

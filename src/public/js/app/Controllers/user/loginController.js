@@ -35,4 +35,5 @@ function loginController($scope,$location,$window,$state,restDataService,ModalSe
 	};
 }
 
+loginController.$inject = ['$scope','$location','$window','$state','restDataService','ModalService'];
 module.exports = loginController;

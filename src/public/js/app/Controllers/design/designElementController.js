@@ -91,4 +91,5 @@ function designElementController($scope,restDataService){
 	$scope.getHTMLElemsList();
 }
 
+designElementController.$inject = ["$scope","restDataService"];
 module.exports =designElementController;

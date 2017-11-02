@@ -1,2 +1,3 @@
-angular.module('app').config(require('./config'));
-angular.module('app').run(require('./run'));
+var app = angular.module('app');
+app.config(require('./config'));
+app.run(require('./run'));

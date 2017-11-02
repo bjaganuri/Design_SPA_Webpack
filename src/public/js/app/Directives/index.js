@@ -1,7 +1,8 @@
 import { pwCheck, checkUserChoiceAvailability } from './common/pwCheck';
 
-angular.module('app').directive('appliedStyle',require('./design/appliedStyle'));
-angular.module('app').directive('pwCheck',pwCheck);
-angular.module('app').directive('checkUserChoiceAvailability',checkUserChoiceAvailability);
-angular.module('app').directive('fileModel',require('./design/fileModel'));
-angular.module('app').directive('styleAdd',require('./design/styleAdd'));
+var app = angular.module('app');
+app.directive('appliedStyle',require('./design/appliedStyle'));
+app.directive('pwCheck',pwCheck);
+app.directive('checkUserChoiceAvailability',checkUserChoiceAvailability);
+app.directive('fileModel',require('./design/fileModel'));
+app.directive('styleAdd',require('./design/styleAdd'));

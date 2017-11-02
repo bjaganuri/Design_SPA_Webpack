@@ -88,4 +88,5 @@ function signupController($scope,restDataService,$state,fileUpload,$timeout){
 	}
 }
 
+signupController.$inject = ['$scope','restDataService','$state','fileUpload','$timeout'];
 module.exports = signupController;

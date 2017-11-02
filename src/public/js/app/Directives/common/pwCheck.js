@@ -40,3 +40,5 @@ export const checkUserChoiceAvailability = function(restDataService){
 		}
 	}
 }
+
+checkUserChoiceAvailability.$inject = ["restDataService"];

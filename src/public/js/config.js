@@ -105,9 +105,9 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 			}
 		},
 		resolve:{
-			getIndexData:function (restDataService) {
+			getIndexData:["restDataService" , function (restDataService) {
 				return restDataService.get('/getIndexJson' , {pageName:'html'});
-			}
+			}]
 		}
 	})
 	.state("learn.css" , {
@@ -119,9 +119,9 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 			}
 		},
 		resolve:{
-			getIndexData:function (restDataService) {
+			getIndexData:["restDataService",function (restDataService) {
 				return restDataService.get('/getIndexJson' , {pageName:'css'});
-			}
+			}]
 		}
 	})
 	.state("learn.js" , {
@@ -133,9 +133,9 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 			}
 		},
 		resolve:{
-			getIndexData:function (restDataService) {
+			getIndexData:["restDataService",function (restDataService) {
 				return restDataService.get('/getIndexJson' , {pageName:'js'});
-			}
+			}]
 		}
 	})
 	.state("design" , {
@@ -229,7 +229,7 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 	.state("adminOPs.viewUser" , {
 		url:"/viewUser",
 		resolve : {
-			lastViewedUserActList:function(restDataService,viewUserLastSearchParams){
+			lastViewedUserActList:["restDataService","viewUserLastSearchParams",function(restDataService,viewUserLastSearchParams){
 				var lastSearchDataObj = viewUserLastSearchParams.getLastSearchParam();
 				if(lastSearchDataObj.searchParam !== ""){
 					return restDataService.get('/getUserAccountsList' , lastSearchDataObj);
@@ -237,7 +237,7 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 				else{
 					return {};
 				}
-			}
+			}]
 		},
 		views:{
 			"content@adminOPs":{
@@ -249,9 +249,9 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 	.state("adminOPs.viewUserDetail" , {
 		url:"/viewUserDetails/:userID",
 		resolve : {
-			userToView:function(restDataService,$stateParams){
+			userToView:["restDataService","$stateParams",function(restDataService,$stateParams){
 				return restDataService.get("/getUserProfile" , {username:$stateParams.userID});
-			}
+			}]
 		},
 		views:{
 			"content@adminOPs":{
@@ -279,4 +279,5 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 	$locationProvider.html5Mode(true);
 }
 
+config.$inject = ['$stateProvider', '$urlRouterProvider','$locationProvider','$urlMatcherFactoryProvider','$httpProvider','idleObserverServiceProvider','T','MIN','IdleProvider','KeepaliveProvider'];
 module.exports = config;

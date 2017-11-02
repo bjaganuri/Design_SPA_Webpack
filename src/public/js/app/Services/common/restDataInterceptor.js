@@ -52,4 +52,5 @@ function restDataInterceptor($q,$injector) {
 	};
 }
 
+restDataInterceptor.$inject = ["$q","$injector"];
 module.exports = restDataInterceptor;

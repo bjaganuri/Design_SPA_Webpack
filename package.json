@@ -4,14 +4,16 @@
   "description": "This is sample application",
   "main": "app.js",
   "engines": {
-    "node": "4.1.1",
-    "npm": "2.1.x"
+    "node": "6.11.5",
+    "npm": "3.10.10"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build",
-    "dev": "webpack -d && nodemon app.js",
-    "build": "webpack -p && node app.js"
+    "start": "npm run prod",
+    "dev": "npm run build:dev && nodemon app.js",
+    "prod": "npm run build:prod && node app.js",
+    "build:dev":"webpack -d",
+    "build:prod":"webpack -p"
   },
   "author": "Basavaraj B J",
   "license": "MIT",

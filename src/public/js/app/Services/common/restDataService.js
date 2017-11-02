@@ -24,4 +24,5 @@ function restDataService($http,$log) {
 	};
 }
 
+restDataService.$inject = ["$http","$log"];
 module.exports = restDataService;

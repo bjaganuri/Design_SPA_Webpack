@@ -13,4 +13,5 @@ function learnController($scope,getIndexData,$anchorScroll,$location,$state){
 	}, true);
 }
 
+learnController.$inject = ['$scope','getIndexData','$anchorScroll','$location','$state'];
 module.exports = learnController;

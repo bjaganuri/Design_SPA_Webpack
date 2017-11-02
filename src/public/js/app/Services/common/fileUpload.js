@@ -17,4 +17,5 @@ function fileUpload($http) {
 	};
 }
 
+fileUpload.$inject = ["$http"];
 module.exports = fileUpload;

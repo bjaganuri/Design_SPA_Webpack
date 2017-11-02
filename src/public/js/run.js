@@ -49,12 +49,12 @@ function run($rootScope,idleObserverService,Idle,$templateCache,ModalService,$st
 	$rootScope.$on("LOGIN_REQ" , function(event,args){
 		var modalInstance = ModalService.showModal({
 			templateUrl: 'reLoginModal.html',
-			controller:function($scope, $element,close){
+			controller:["$scope", "$element", "close",function($scope, $element,close){
 				$rootScope.reLoginTriggered = true;
-			},
-			preClose: function(modal){
+			}],
+			preClose: ["modal" , function(modal){
 				return modal.element.modal('hide');
-			}
+			}]
 		}).then(function(modal) {
 			modal.element.modal();
 			$('.modal-backdrop').removeClass( "login-req-modal-backdrop");
@@ -72,15 +72,15 @@ function run($rootScope,idleObserverService,Idle,$templateCache,ModalService,$st
 		var data = eventData;
 		var modalInstance = ModalService.showModal({
 			templateUrl: 'accountLocked.html',
-			controller:function($scope, $element, close){
+			controller:["$scope", "$element", "close",function($scope, $element, close){
 				$scope.okBtnClick = function(){
 					$element.modal('hide');
 					close(data, 200);
 				};
-			},
-			preClose: function(modal){
+			}],
+			preClose: ["modal",function(modal){
 				return modal.element.modal('hide');
-			}
+			}]
 		}).then(function(modal) {
 			modal.element.modal();
 			modal.close.then(function(result) {
@@ -96,4 +96,5 @@ function run($rootScope,idleObserverService,Idle,$templateCache,ModalService,$st
 	Idle.watch();
 }
 
+run.$inject = ['$rootScope','idleObserverService' , 'Idle','$templateCache','ModalService','$state','$window'];
 module.exports = run;

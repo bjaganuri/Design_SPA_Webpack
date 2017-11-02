@@ -10,7 +10,7 @@ function styleAdd() {
 			};
 			return linkFunction;
 		},
-		controller:function ($scope,$element,$attrs) {
+		controller:["$scope","$element","$attrs" , function ($scope,$element,$attrs) {
 			$scope.updateChangedStyleVal = function (styleVal) {
 				if(styleVal == "" || styleVal == undefined || styleVal == " "){
 					delete $scope.curElemAppliedStyles[$scope.style.name];
@@ -35,7 +35,7 @@ function styleAdd() {
 					}).tooltip("show");   
 				}
 			};
-		}
+		}]
 		
 	};
 }

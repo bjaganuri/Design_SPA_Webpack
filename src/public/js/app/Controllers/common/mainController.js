@@ -4,4 +4,5 @@ function mainController($scope,idleObserverService){
 	};
 }
 
+mainController.$inject = ["$scope","idleObserverService"];
 module.exports = mainController;
