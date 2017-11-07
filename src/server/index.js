@@ -103,7 +103,7 @@ app.get("/viewUserDetails/:username" , ensureAuthenticated , Routes.viewUserDeta
 
 app.get("/addNewUser" , ensureAuthenticated ,  Routes.addNewUser);
 
-app.get("/getUserAccountsList" , ensureAuthenticated , AdminOPS.getUserAccountsList);
+app.post("/getUserAccountsList" , ensureAuthenticated , AdminOPS.getUserAccountsList);
 
 app.post("/manageAccountLock" , ensureAuthenticated , AdminOPS.manageLockAdminRight);
 

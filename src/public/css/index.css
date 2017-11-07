@@ -347,3 +347,27 @@ label.text-left {
 	opacity: 1 !important;
 	filter: alpha(opacity=100); /* For IE8 and earlier */
 }
+
+.v-align-top {
+	vertical-align: top !important;
+}
+
+.v-align-baseline {
+	vertical-align: baseline !important;
+}
+
+.v-align-middle {
+	vertical-align: middle !important;
+}
+
+.v-align-bottom {
+	vertical-align: bottom !important;
+}
+
+.v-align-t-top {
+	vertical-align: text-top !important;
+}
+
+.v-align-t-bottom {
+	vertical-align: text-bottom !important;
+}

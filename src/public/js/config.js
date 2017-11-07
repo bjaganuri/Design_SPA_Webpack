@@ -231,8 +231,15 @@ function config($stateProvider, $urlRouterProvider,$locationProvider,$urlMatcher
 		resolve : {
 			lastViewedUserActList:["restDataService","viewUserLastSearchParams",function(restDataService,viewUserLastSearchParams){
 				var lastSearchDataObj = viewUserLastSearchParams.getLastSearchParam();
-				if(lastSearchDataObj.searchParam !== ""){
-					return restDataService.get('/getUserAccountsList' , lastSearchDataObj);
+				var searchDataFound = false;
+				for(var key in lastSearchDataObj.tableSearch){
+					if(lastSearchDataObj["tableSearch"][key] !== ""){
+						searchDataFound = true;
+						break;
+					}
+				}
+				if(lastSearchDataObj.globalSerach.searchParam !== "" || searchDataFound === true){
+					return restDataService.post('/getUserAccountsList' , lastSearchDataObj);
 				}
 				else{
 					return {};

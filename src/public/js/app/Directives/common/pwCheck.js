@@ -42,3 +42,19 @@ export const checkUserChoiceAvailability = function(restDataService){
 }
 
 checkUserChoiceAvailability.$inject = ["restDataService"];
+
+export const updateOnEnter = function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            element.bind("keyup", function(ev) {
+                if (ev.keyCode == 13) {
+                    ctrl.$commitViewValue();
+                    ctrl.$setTouched();
+					scope.$parent.$parent.fecthAndUpDateTableData(scope.$parent.$parent.manageAcctSearchParams);
+                }
+            });
+        }
+    }
+};

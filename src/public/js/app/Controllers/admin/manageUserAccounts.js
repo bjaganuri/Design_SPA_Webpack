@@ -4,16 +4,37 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 	$scope.sameAsWorkingUserID = "";
 	$scope.manageAcctSearchParams.pageNo =1;
 	$scope.manageAcctSearchParams.pageSize = 10;
+	$scope.manageAcctSearchParams.globalSerach = {
+		searchParam: ""
+	};
+	$scope.manageAcctSearchParams.tableSearch = {};
 	$scope.lastPageNo = 0;
 	$scope.recordsSize = 0;
 	$scope.accountsList = [];
 	$scope.dataReadSuccess = false;
-	$scope.accountsListHeaders = ['Sl.No' , 'Name' , 'Email' , 'Username' , 'Operational State' , 'Admin' , 'Action'];
+	$scope.accountsListHeaders = [
+								  {header:'Sl.No',filter:false,attribute:'SLNO'}, 
+								  {header:'Name',filter:true,attribute:'name'},
+								  {header:'Email',filter:true,attribute:'email'},
+								  {header:'Username',filter:true,attribute:'username'},
+								  {header:'Operational State',filter:true,attribute:'opState'},
+								  {header:'Admin',filter:true,attribute:'admin'},
+								  {header:'Action',filter:false,attribute:'Action'}
+								];
 	$scope.userDataToview = userToView.data;
 	$scope.userDataToUpdate = {};
 
+	$scope.lastSuccessFullSearch = angular.copy($scope.manageAcctSearchParams);
+
+	$scope.undoSearch = function ($event) {
+		$event.preventDefault();
+		$scope.manageAcctSearchParams = angular.copy($scope.lastSuccessFullSearch);
+		$scope.fecthAndUpDateTableData($scope.manageAcctSearchParams);
+	};
+
 	$scope.getAccountsList = function($event){
 		$event.preventDefault();
+		$scope.manageAcctSearchParams.tableSearch = {};
 		$scope.manageAcctSearchParams.pageNo =1;
 		$scope.submitted = true;
 		if($scope.searchAccountsForm.$valid){
@@ -162,7 +183,7 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 
 	$scope.fecthAndUpDateTableData = function(acctListingParams){
 		viewUserLastSearchParams.setLastFilterParam(acctListingParams);
-		restDataService.getData("/getUserAccountsList" , acctListingParams , function(response){
+		restDataService.postData("/getUserAccountsList" , acctListingParams , function(response){
 			$scope.updateTable(response.data);
 		});	
 	};
@@ -174,6 +195,9 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 		$scope.lastPageNo = data.noOfPages;
 		$scope.recordsSize = data.recordsSize;
 		$scope.dataReadSuccess = true;
+		if($scope.accountsList.length > 0){
+			$scope.lastSuccessFullSearch = angular.copy($scope.manageAcctSearchParams);
+		}
 	};
 
 	if(lastViewedUserActList && lastViewedUserActList.data && lastViewedUserActList.data.results && lastViewedUserActList.data.results.length > 0){

@@ -7,7 +7,7 @@
 		<form name="searchAccountsForm" ng-submit="getAccountsList($event)" novalidate class="form-horizontal">
 			<div class="form-group">
 				<div class="col-sm-6">
-					<input type="text" name="searchParam" ng-model="manageAcctSearchParams.searchParam" placeholder="Enter Email or Username or Name" class="form-control" required>
+					<input type="text" name="searchParam" ng-model="manageAcctSearchParams.globalSerach.searchParam" placeholder="Enter Email or Username or Name" class="form-control" required>
 					<span class="text-danger" ng-show="searchAccountsForm.searchParam.$invalid">
 						<span ng-show="submitted && searchAccountsForm.searchParam.$error.required">Search field can not be empty</span>
 					</span>
@@ -25,6 +25,7 @@
 
 	<div class="col-sm-12" ng-hide="!(accountsList.length === 0 && dataReadSuccess)">
 		<h2> No Data found </h2>
+		<a href="javascript:void(0)" ng-click="undoSearch($event)" ng-if="lastSearch.globalSerach.searchParam !== ''">Back to previous search</a>
 	</div>
  
 	<div class="col-sm-12" ng-hide="accountsList.length === 0">
@@ -44,14 +45,19 @@
 			<table class="table table-striped table-bordered" id="userAccountListTable">
 				<thead>
 					<tr>
-						<th ng-repeat="header in accountsListHeaders" class="media-middle">
-							{{header}}
+						<th ng-repeat="header in accountsListHeaders" class="media-middle v-align-top">
+							<div class="m-b-5">
+								<span> {{header.header}} </span>
+							</div>
+							<div class="form-group m-b-0" ng-if="header.filter">
+								<input type="text" class="form-control" name={{header.attribute}} ng-model="manageAcctSearchParams.tableSearch[header.attribute]" update-on-enter />
+							</div>
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="user in accountsList">
-						<td>{{$index+1}}</td>
+						<td>{{((manageAcctSearchParams.pageNo-1)*manageAcctSearchParams.pageSize)+$index+1}}</td>
 						<td>
 							<a ui-sref="adminOPs.viewUserDetail({userID:user.username})" title="View {{user.name}}'s profile details">{{user.name}}</a>
 						</td>

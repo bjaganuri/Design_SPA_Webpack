@@ -1,6 +1,11 @@
 function viewUserLastSearchParams() {
 	var lastSearchParams = {
-		searchParam:"",
+		globalSerach:{
+			searchParam: ""
+		},
+		tableSearch: {
+		
+		},
 		pageNo:1,
 		pageSize:10
 	};
@@ -9,7 +14,10 @@ function viewUserLastSearchParams() {
 	angular.copy(lastSearchParams,originalCopy);
 
 	this.setLastFilterParam = function(searchData){
-		lastSearchParams.searchParam = searchData.searchParam;
+		lastSearchParams.globalSerach = {
+			searchParam: searchData.globalSerach.searchParam
+		};
+		lastSearchParams.tableSearch = searchData.tableSearch;
 		lastSearchParams.pageNo = searchData.pageNo;
 		lastSearchParams.pageSize = searchData.pageSize;
 	};

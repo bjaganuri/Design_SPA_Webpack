@@ -8,17 +8,42 @@ var handleServerError = require("../common/error_handler");
 var fileUploadService = require('../common/file_upload');
 
 module.exports.getUserAccountsList = function(req,res){
-	var param = req.query.searchParam;
-	var skip = parseInt(req.query.pageNo);
-	var limit = parseInt(req.query.pageSize);
+	var param = "";
+	var skip = parseInt(req.body.pageNo);
+	var limit = parseInt(req.body.pageSize);
 	var noOfPages = 0;
 	var recordsSize = 0;
-	var query = "";
+	var finalSearchQuery = [];
+	var globalSearchQuery = [];
+	var tableFilterQuery = [];
+	var tableSearchObj = {};
+
+	if(req.body.hasOwnProperty("globalSerach") && req.body.globalSerach.hasOwnProperty("searchParam") && req.body.globalSerach.searchParam !== ""){
+		param = req.body.globalSerach.searchParam;
+		globalSearchQuery = [{ name:{$regex:param, $options:'i' }} , { username:{$regex:param, $options:'i' }} , { email:{$regex:param, $options:'i' }}];
+	}
+
+	if(req.body.hasOwnProperty("tableSearch") && Object.keys(req.body.tableSearch).length > 0){
+		tableSearchObj = req.body.tableSearch;
+		tableFilterQuery = [];
+		for(key in tableSearchObj){
+			if(tableSearchObj[key] !== ""){
+				tableFilterQuery.push({[key]:{$regex:tableSearchObj[key], $options:'i'}});
+			}
+		}
+	}
+
+	if(Object.keys(tableFilterQuery).length > 0){
+		finalSearchQuery = {$and:[{$or:globalSearchQuery} , {$and:tableFilterQuery}]};
+	}
+	else{
+		finalSearchQuery = {$or:globalSearchQuery};
+	}
 
 	if(req.user && req.user.admin && (req.user.admin === true || req.user.admin === "true")){
 		//query = {$and : [{name:{$nin:[req.user.name]} , username: {$nin:[req.user.username]} , email : {$nin:[req.user.email]}}, {$or:[{ name:{$regex:param, $options:'i' }} , { username:{$regex:param, $options:'i' }} , { email:{$regex:param, $options:'i' }}]}]};
-		query = {$or:[{ name:{$regex:param, $options:'i' }} , { username:{$regex:param, $options:'i' }} , { email:{$regex:param, $options:'i' }}]};		
-		User.count(query , function(err,length){
+		
+		User.count(finalSearchQuery , function(err,length){
 			if(err) {
 				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
 			}
@@ -40,11 +65,11 @@ module.exports.getUserAccountsList = function(req,res){
 
 			noOfPages = Math.ceil(recordsSize/limit);
 
-			User.getUserAccounts(query,skip,limit,function(err,usersData){
+			User.getUserAccounts(finalSearchQuery,skip,limit,function(err,usersData){
 				if(err){
 					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
 				}
-				res.status(HttpStatus.OK).send({workingUserId:req.user.username , recordsSize:recordsSize, pageNo:parseInt(Math.round(skip/limit)+1) , pageSize:limit, noOfPages:noOfPages , results:usersData});
+				res.status(HttpStatus.OK).send({workingUserId:req.user.username , recordsSize:recordsSize, pageNo:parseInt(Math.round(skip/limit)+1) , pageSize:limit, noOfPages:noOfPages , results:usersData,query:finalSearchQuery});
 			});
 		});
 	}
