@@ -27,7 +27,18 @@ module.exports.getUserAccountsList = function(req,res){
 		tableSearchObj = req.body.tableSearch;
 		tableFilterQuery = [];
 		for(key in tableSearchObj){
-			if(tableSearchObj[key] !== ""){
+			if(tableSearchObj[key] !== "" && key === "admin"){
+				if(tableSearchObj[key].toString().toLowerCase() === "yes" || tableSearchObj[key].toString().toLowerCase() === "true" || tableSearchObj[key].toString().toLowerCase() === true) {
+					tableFilterQuery.push({[key]:{$type:"bool" , $eq: true}});
+				}
+				else if (tableSearchObj[key].toString().toLowerCase() === "no" || tableSearchObj[key].toString().toLowerCase() === "false" || tableSearchObj[key].toString().toLowerCase() === false) {
+					tableFilterQuery.push({[key]:{$type:"bool", $in: [null,false]}});
+				}
+				else {
+					tableFilterQuery.push({[key]:{$not:{$type:"bool"}}});
+				}
+			}
+			else if(tableSearchObj[key] !== "") {
 				tableFilterQuery.push({[key]:{$regex:tableSearchObj[key], $options:'i'}});
 			}
 		}
