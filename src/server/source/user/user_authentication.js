@@ -143,7 +143,17 @@ module.exports.recoverUser = function (req,res) {
 		if(err){
 			return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
 		}
-		res.status(HttpStatus.OK).send((user !== null && user !== '' && user !== undefined && user !== ' ') ? user : {});
+		if((user !== null && user !== '' && user !== undefined && user !== ' ')){
+			if(user.opState === "LOCKED") {
+				res.status(HttpStatus.OK).send({status:"Failed" , info:{message:"Cannot reset password of locked account, contact admin to unlock the account first"}});
+			}
+			else {
+				res.status(HttpStatus.OK).send({status:"Success" , user: user});
+			}
+		}
+		else {
+			res.status(HttpStatus.OK).send({status:"Failed" , info:{message:"Invalid user details"}});
+		}
 	});
 };
 
@@ -170,6 +180,11 @@ module.exports.setNewPassword = function (req,res) {
 			return handleServerError.handleServerError({status:"ERROR" , type:'VAL_ERROR' ,message:result.array()} , req , res);
 		}
 		else{
+			Object.assign(req.body,{
+				loginAttempts: 0,
+				opState: "ACTIVE",
+				lockUntil: 1
+			});
 			User.updateUserProfileData(req.body , function(err , raw){
 				if(err){
 					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);

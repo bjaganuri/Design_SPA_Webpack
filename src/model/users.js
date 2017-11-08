@@ -37,9 +37,6 @@ var UserSchema = new Schema({
 	timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }
 });
 
-var User =  mongoose.model('User', UserSchema);
-module.exports = User;
-
 UserSchema.statics.failedLogin = {
     NOT_FOUND: 0,
     PASSWORD_INCORRECT: 1,
@@ -92,6 +89,9 @@ UserSchema.methods.incrementLoginAttempts = function(cb) {
     }
     return this.update(updates, cb);
 };
+
+var User =  mongoose.model('User', UserSchema);
+module.exports = User;
 
 var hashPwdAndUpdateData = function  (query,user,salt,callback){
 	bcrypt.genSalt(salt, function(err, salt) {
