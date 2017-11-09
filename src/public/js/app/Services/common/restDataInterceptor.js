@@ -20,6 +20,8 @@ function restDataInterceptor($q,$injector) {
 		var rejectionType = rejData.type;
 		var rejectionMessage = rejData.message;
 		var statusCode = rejection.status;
+		var defer = $q.defer();
+
 		if((statusCode === 500 || statusCode === "500") && status === "ERROR"){
 			switch (rejectionType){
 				case "NOT_ADMIN":
@@ -41,14 +43,22 @@ function restDataInterceptor($q,$injector) {
 				case "LOGIN_REQ":
 					$rootScope.$broadcast("LOGIN_REQ");
 					break;
+				case "VAL_ERROR":
+					rejection.data.status = rejection.data.type;
+					delete rejection.data.type;
+					defer.resolve({data:rejection.data});
+					break;
 			}
 		}
-		if($rootScope.stateChangeStarted){
-			return $q.resolve(rejection);
-		}
 		else {
-			return $q.reject(rejection);
+			if($rootScope.stateChangeStarted){
+				defer.resolve(rejection);
+			}
+			else {
+				defer.reject(rejection);
+			}	
 		}
+		return defer.promise;
 	};
 }
 

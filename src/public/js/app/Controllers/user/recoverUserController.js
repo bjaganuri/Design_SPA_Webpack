@@ -5,7 +5,6 @@ function recoverUserController($scope,restDataService){
 	$scope.hidePasswdResetForm = true;
 	$scope.validUserData = true;
 	$scope.passwdResetSuccess = false;
-	$scope.passwdResetFailed = false;
 	$scope.errorMsg = "Invalid User Details";
 	$scope.getCredentials = function($event){
 		$event.preventDefault();
@@ -23,7 +22,6 @@ function recoverUserController($scope,restDataService){
 					}
 					$scope.hidePasswdResetForm = true;
 					$scope.passwdResetSuccess = false;
-					$scope.passwdResetFailed = false;
 					$scope.validUserData = false;
 				}
 				else {
@@ -31,14 +29,12 @@ function recoverUserController($scope,restDataService){
 						$scope.user = response.data.user;
 						$scope.hidePasswdResetForm = false;
 						$scope.passwdResetSuccess = false;
-						$scope.passwdResetFailed = false;
 						$scope.validUserData = true;
 					}
 					else{
 						$scope.errorMsg = "Invalid User Details";
 						$scope.hidePasswdResetForm = true;
 						$scope.passwdResetSuccess = false;
-						$scope.passwdResetFailed = false;
 						$scope.validUserData = false;
 					}
 				}
@@ -57,16 +53,15 @@ function recoverUserController($scope,restDataService){
 			$scope.user.password = $scope.newPasswd.password;
 			restDataService.postData("/setNewPassword",$scope.user,function(response){
 				if(response.data.status == "Success"){
-					$scope.hidePasswdResetForm = true;
 					$scope.passwdResetSuccess = true;
-					$scope.passwdResetFailed = false;
 					$scope.validUserData = true;
 				}
 				else if(response.data.status === "VAL_ERROR"){
+					$scope.errorMsg = response.data.message;
 					$scope.passwdResetSuccess = false;
-					$scope.passwdResetFailed = true;
-					$scope.validUserData = true;
+					$scope.validUserData = false;
 				}
+				$scope.hidePasswdResetForm = true;
 				$event.target.reset();
 				$scope.newPasswd = {};
 				$scope.setNewPasswdForm.$setPristine();

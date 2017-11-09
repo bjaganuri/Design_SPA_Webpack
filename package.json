@@ -12,8 +12,8 @@
     "start": "npm run prod",
     "dev": "npm run build:dev && nodemon app.js",
     "prod": "npm run build:prod && node app.js",
-    "build:dev":"webpack -d",
-    "build:prod":"webpack -p"
+    "build:dev": "webpack -d",
+    "build:prod": "webpack -p"
   },
   "author": "Basavaraj B J",
   "license": "MIT",
@@ -45,7 +45,7 @@
     "async": "^2.3.0",
     "bcryptjs": "^2.4.0",
     "body-parser": "^1.15.2",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.3.6",
     "compression": "^1.6.2",
     "connect": "^3.5.0",
     "connect-flash": "^0.1.1",
@@ -74,7 +74,7 @@
     "install": "^0.10.1",
     "ipware": "^1.0.0",
     "jade": "latest",
-    "jquery": "^3.2.1",
+    "jquery": "^1.12.4",
     "jsonfile": "^3.0.0",
     "jsonwebtoken": "^7.2.1",
     "latest-version": "^3.1.0",
