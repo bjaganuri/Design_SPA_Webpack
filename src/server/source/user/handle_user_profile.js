@@ -15,7 +15,7 @@ module.exports.getUserProfile = function (req,res) {
 	}
     User.getUserProfile(query , function(err,user){
 		if(err){
-			return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+			return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 		}
 		var resObj = {};
 		if(user){		
@@ -67,13 +67,13 @@ module.exports.updateUserProfile = function (req, res, next) {
 		else{
 			User.updateUserProfileData(req.body , function (err , raw) {
 				if(err){
-					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 				}
 				else if(raw.n >= 1){
 					res.status(HttpStatus.OK).send(JSON.stringify({status:"Success"}));
 				}
 				else{
-					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:"Unknown error occured, please try again"} , req , res);
 				}
 			});
 		}

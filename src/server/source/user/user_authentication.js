@@ -106,7 +106,7 @@ module.exports.signUp = function (req,res) {
 			var newUser = new User(req.body);
 			User.createNewUser(newUser , function(err , user){
 				if(err) {
-					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 				}
 				else{
 					res.status(HttpStatus.OK).send(JSON.stringify({status:"Success"}));
@@ -130,7 +130,7 @@ module.exports.login = function (req, res, next) {
 			}
 			ActiveUsers.removeActiveSession({$and:[{'session.passport.user':{$eq:req.session.passport.user} , _id:{$not:{$eq:req.sessionID}}}]},function (error) {
 				if(error) {
-					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:error} , req , res);
 				}
 				return res.status(HttpStatus.OK).send(JSON.stringify({status:"Success",message:info}));
 			});
@@ -141,7 +141,7 @@ module.exports.login = function (req, res, next) {
 module.exports.recoverUser = function (req,res) {
     User.recoverUserData(req.query , function(err , user){
 		if(err){
-			return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+			return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 		}
 		if((user !== null && user !== '' && user !== undefined && user !== ' ')){
 			if(user.opState === "LOCKED") {
@@ -187,13 +187,13 @@ module.exports.setNewPassword = function (req,res) {
 			});
 			User.updateUserProfileData(req.body , function(err , raw){
 				if(err){
-					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 				}
 				else if(raw.n >= 1){
 					res.status(HttpStatus.OK).send(JSON.stringify({status:"Success"}));
 				}
 				else{
-					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:"Unknown error occured, please try again"} , req , res);
 				}
 			});
 		}
@@ -208,7 +208,7 @@ module.exports.checkUserChoiceAvailability = function(req,res){
 	query[fieldName] = {$in:[params[fieldName]]};
 	User.getUserAccounts(query,0,10,function(err,resultArr){
 		if(err){
-			return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+			return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 		}
 		else if(resultArr.length > 0){
 			res.status(HttpStatus.OK).send({status:true});	

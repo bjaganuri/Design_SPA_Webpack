@@ -56,7 +56,7 @@ module.exports.getUserAccountsList = function(req,res){
 		
 		User.count(finalSearchQuery , function(err,length){
 			if(err) {
-				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 			}
 			recordsSize = length;
 
@@ -78,7 +78,7 @@ module.exports.getUserAccountsList = function(req,res){
 
 			User.getUserAccounts(finalSearchQuery,skip,limit,function(err,usersData){
 				if(err){
-					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+					return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 				}
 				res.status(HttpStatus.OK).send({workingUserId:req.user.username , recordsSize:recordsSize, pageNo:parseInt(Math.round(skip/limit)+1) , pageSize:limit, noOfPages:noOfPages , results:usersData,query:finalSearchQuery});
 			});
@@ -93,7 +93,7 @@ module.exports.manageLockAdminRight = function(req, res){
 	if(req.user && req.user.admin && (req.user.admin === true || req.user.admin === "true")){
 		User.getUserProfile({username:req.body.username , email:req.body.email} , function(err,user){
 			if(err){
-				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 			}
 			var validReq = true;
 			if(req.body.hasOwnProperty('action') && req.body.action.length > 0 && req.body.upDateUserRightOpComments){
@@ -138,18 +138,18 @@ module.exports.manageLockAdminRight = function(req, res){
 			}
 			
 			if(!validReq){
-				return handleServerError.handleServerError({status:"ERROR" , type:'INVALID_REQ'} , req , res);
+				return handleServerError.handleServerError({status:"ERROR" , type:'INVALID_REQ', message:"Invalid Request"} , req , res);
 			}
 			else{
 				User.updateUserProfileData(user , function (err , raw) {
 					if(err){
-						return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+						return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 					}
 					else if(raw.n >= 1){
 						res.status(HttpStatus.OK).send(JSON.stringify({status:"Success"}));
 					}
 					else{
-						return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+						return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:"Unknown error occured"} , req , res);
 					}
 				});
 			}
@@ -164,7 +164,7 @@ module.exports.importUsersList = function(req,res){
 	if(req.user && req.user.admin && (req.user.admin === true || req.user.admin === "true")){
 		fileUploadService.getFileData(req,res,function(err , data){
 			if(err){
-				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 			}
 			else{
 				JobScheduler.scheduleCreateMulUserJob(/*"in 1 minutes"*/"now" , {data:data,scheduledBy:req.user.username,schedulerEmail:req.user.email},"Import_users_"+req.file.filename+"_"+req.params.reqFileType+"_"+req.user.username+"_"+Date.now() , function(err,job){
@@ -180,7 +180,7 @@ module.exports.importUsersList = function(req,res){
 						job.attrs.status = "SCHEDULED";
 						job.save(function(err){
 							if(err){
-								return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+								return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 							}
 							fileUploadService.removeTempFile(req.file.path,req.file.originalname);
 							res.status(HttpStatus.OK).json(JSON.stringify(result));
@@ -212,7 +212,7 @@ module.exports.html2pdf = function(req,res){
 		
 		pdf.create(JSON.parse(req.body.html2pdfData),options).toBuffer(function(err, buffer) {
 			if (err) {
-				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR'} , req , res);
+				return handleServerError.handleServerError({status:"ERROR" , type:'SERVER_ERROR', message:err} , req , res);
 			}				
 			res.status(HttpStatus.OK).send(new Buffer(buffer, 'binary'));
 		});
