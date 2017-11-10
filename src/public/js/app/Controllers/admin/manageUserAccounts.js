@@ -29,7 +29,15 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 	$scope.undoSearch = function ($event) {
 		$event.preventDefault();
 		$scope.manageAcctSearchParams = angular.copy($scope.lastSuccessFullSearch);
-		$scope.fecthAndUpDateTableData($scope.manageAcctSearchParams);
+		if($scope.lastSuccessFullSearch.globalSerach.searchParam !== ""){
+			$scope.fecthAndUpDateTableData($scope.manageAcctSearchParams);	
+		}
+		else {
+			$scope.dataReadSuccess = false;
+			$scope.submitted = false;
+			$scope.searchAccountsForm.$setPristine();
+			$scope.searchAccountsForm.$setUntouched();
+		}
 	};
 
 	$scope.getAccountsList = function($event){
@@ -182,13 +190,12 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 	};
 
 	$scope.fecthAndUpDateTableData = function(acctListingParams){
-		viewUserLastSearchParams.setLastFilterParam(acctListingParams);
 		restDataService.postData("/getUserAccountsList" , acctListingParams , function(response){
-			$scope.updateTable(response.data);
+			$scope.updateTable(response.data,response.config.data);
 		});	
 	};
 	
-	$scope.updateTable = function(data){
+	$scope.updateTable = function(data,searchData){
 		$scope.accountsList  = [];
 		[].push.apply($scope.accountsList , data.results);
 		$scope.sameAsWorkingUserID = data.workingUserId;
@@ -196,12 +203,13 @@ function manageUserAccounts($scope,restDataService,$state,userToView,ModalServic
 		$scope.recordsSize = data.recordsSize;
 		$scope.dataReadSuccess = true;
 		if($scope.accountsList.length > 0){
+			viewUserLastSearchParams.setLastFilterParam(searchData);
 			$scope.lastSuccessFullSearch = angular.copy($scope.manageAcctSearchParams);
 		}
 	};
 
 	if(lastViewedUserActList && lastViewedUserActList.data && lastViewedUserActList.data.results && lastViewedUserActList.data.results.length > 0){
-		$scope.updateTable(lastViewedUserActList.data);
+		$scope.updateTable(lastViewedUserActList.data,lastViewedUserActList.config.data);
 		angular.copy(viewUserLastSearchParams.getLastSearchParam() , $scope.manageAcctSearchParams);
 	}
 

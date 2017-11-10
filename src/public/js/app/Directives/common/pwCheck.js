@@ -48,13 +48,27 @@ export const updateOnEnter = function() {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attrs, ctrl) {
+			var typingDelay = 500;
+			var typingTimer;
             element.bind("keyup", function(ev) {
+				clearTimeout(typingTimer);
                 if (ev.keyCode == 13) {
                     ctrl.$commitViewValue();
                     ctrl.$setTouched();
-					scope.$parent.$parent.fecthAndUpDateTableData(scope.$parent.$parent.manageAcctSearchParams);
+					triggerDataFetch();
                 }
+				else {
+					typingTimer = setTimeout(triggerDataFetch, typingDelay);
+				}
             });
+
+			element.bind("keydown", function(ev) {
+                clearTimeout(typingTimer);
+            });
+
+			function triggerDataFetch (){
+				scope.$parent.$parent.fecthAndUpDateTableData(scope.$parent.$parent.manageAcctSearchParams);
+			}
         }
     }
 };
